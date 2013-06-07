@@ -22,6 +22,8 @@
 
 #include "capi/capi_constants.h"
 
+#include "constant_serials.hpp"
+
 #include <vector>
 #include <tr1/unordered_map>
 #include <tr1/unordered_set>
@@ -130,6 +132,7 @@ namespace rubinius {
     LLVMState* llvm_state;
     Stats stats;
     uint32_t hash_seed;
+    ConstantSerials constant_serials;
 
   public:
     SharedState(Environment* env, Configuration& config, ConfigParser& cp);

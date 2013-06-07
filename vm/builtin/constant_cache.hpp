@@ -4,6 +4,7 @@
 #include "builtin/object.hpp"
 #include "machine_code.hpp"
 #include "object_utils.hpp"
+#include "constant_serials.hpp"
 
 namespace rubinius {
   class ConstantScope;
@@ -21,6 +22,7 @@ namespace rubinius {
     Executable* executable_; // slot
     int ip_;
     int serial_;
+    ConstantSerials::Serial* serial_ptr_;
 
   public:
     attr_accessor(name, Symbol);
@@ -44,15 +46,14 @@ namespace rubinius {
     static ConstantCache* empty(STATE, Symbol* name, Executable* executable, int ip);
 
     Object* retrieve(STATE, ConstantScope* scope) {
-      if(serial_ == state->shared().global_serial() &&
-         scope_ == scope) {
+      if(serial_ptr_->valid_p(serial_) && scope_ == scope) {
         return value_;
       }
       return NULL;
     }
 
     Object* retrieve(STATE, Module* under, ConstantScope* scope) {
-      if(serial_ == state->shared().global_serial() &&
+      if(serial_ptr_->valid_p(serial_) &&
          scope_ == scope &&
          under_ == under) {
         return value_;
