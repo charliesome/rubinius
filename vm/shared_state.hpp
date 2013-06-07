@@ -89,7 +89,6 @@ namespace rubinius {
 
     uint64_t method_count_;
     unsigned int class_count_;
-    int global_serial_;
     int thread_ids_;
 
     bool initialized_;
@@ -187,20 +186,7 @@ namespace rubinius {
     void add_managed_thread(ManagedThread* thr);
     void remove_managed_thread(ManagedThread* thr);
 
-    int global_serial() const {
-      return global_serial_;
-    }
-
-    int inc_global_serial(STATE) {
-      atomic::fetch_and_add(&global_serial_, (int)1);
-      return global_serial_;
-    }
-
     uint32_t new_thread_id();
-
-    int* global_serial_address() {
-      return &global_serial_;
-    }
 
     unsigned int inc_class_count(STATE) {
       atomic::fetch_and_add(&class_count_, (unsigned int)1);
