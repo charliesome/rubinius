@@ -83,7 +83,7 @@ class Module
     end
 
     constant_table.store(name, Autoload.new(name, self, path), :public)
-    Rubinius.inc_global_serial
+    Rubinius.inc_constant_serial(name)
     return nil
   end
 

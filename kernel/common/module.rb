@@ -418,7 +418,7 @@ class Module
     end
 
     @constant_table.store(name, value, :public)
-    Rubinius.inc_global_serial
+    Rubinius.inc_constant_serial(name)
 
     return value
   end
@@ -513,7 +513,7 @@ class Module
     end
 
     val = constant_table.delete(sym)
-    Rubinius.inc_global_serial
+    Rubinius.inc_constant_serial(sym)
 
     # Silly API compact. Shield Autoload instances
     return nil if Rubinius::Type.object_kind_of?(val, Autoload)

@@ -112,7 +112,7 @@ class Module
       Object.singleton_class.constant_table.store(name, autoload_contant, :public)
     end
 
-    Rubinius.inc_global_serial
+    Rubinius.inc_constant_serial(name)
     return nil
   end
 
