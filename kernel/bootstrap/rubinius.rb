@@ -26,6 +26,11 @@ module Rubinius
     raise PrimitiveFailure, "Rubinius.vm_inc_global_serial primitive failed"
   end
 
+  def self.inc_constant_serial(name)
+    Rubinius.primitive :vm_inc_constant_serial
+    raise PrimitiveFailure, "Rubinius.vm_inc_constant_serial primitive failed"
+  end
+
   # Deoptimize all methods in the system.
   def self.deoptimize_all(disable)
     Rubinius.primitive :vm_deoptimize_all

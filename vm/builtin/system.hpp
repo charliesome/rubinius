@@ -249,6 +249,10 @@ namespace rubinius {
     // Rubinius.primitive :vm_inc_global_serial
     static Object* vm_inc_global_serial(STATE, CallFrame* calling_environment);
 
+    // Increment the serial number for a given constant name
+    // Rubinius.primitive :vm_inc_constant_serial
+    static Object* vm_inc_constant_serial(STATE, Symbol* name);
+
     // Print out the current backtrace of ruby code
     // Rubinius.primitive :vm_show_backtrace
     static Object* vm_show_backtrace(STATE, CallFrame* calling_environment);

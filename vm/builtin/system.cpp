@@ -1057,6 +1057,11 @@ namespace rubinius {
     return Fixnum::from(state->shared().inc_global_serial(state));
   }
 
+  Object* System::vm_inc_constant_serial(STATE, Symbol* name) {
+    state->shared().constant_serials.symbol_serial(name)->increment();
+    return cNil;
+  }
+
   Object* System::vm_deoptimize_all(STATE, Object* o_disable) {
     ObjectWalker walker(state->memory());
     GCData gc_data(state->vm());
