@@ -27,9 +27,11 @@ namespace rubinius {
   };
 
   class ConstantSerialMap {
+    rubinius::utilities::thread::SpinLock lock_;
     std::tr1::unordered_map<native_int, ConstantSerial*> serials_;
 
   public:
+    ConstantSerialMap();
     ConstantSerial* operator [](Symbol*);
   };
 }
