@@ -1058,7 +1058,7 @@ namespace rubinius {
   }
 
   Object* System::vm_inc_constant_serial(STATE, Symbol* name) {
-    state->shared().constant_serials.symbol_serial(name)->increment();
+    state->shared().constant_serials[name]->increment();
     return cNil;
   }
 

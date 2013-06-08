@@ -30,7 +30,7 @@ namespace rubinius {
     std::tr1::unordered_map<native_int, ConstantSerial*> serials_;
 
   public:
-    ConstantSerial* symbol_serial(Symbol*);
+    ConstantSerial* operator [](Symbol*);
   };
 }
 
