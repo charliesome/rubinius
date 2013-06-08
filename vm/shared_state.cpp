@@ -35,7 +35,6 @@ namespace rubinius {
     , world_(new WorldState(&check_global_interrupts_))
     , method_count_(0)
     , class_count_(0)
-    , global_serial_(0)
     , thread_ids_(1)
     , initialized_(false)
     , ruby_critical_set_(false)

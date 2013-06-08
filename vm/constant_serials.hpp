@@ -17,7 +17,11 @@ namespace rubinius {
       return serial_;
     }
 
-    bool valid_p(native_int serial) {
+    native_int* serial_address() const {
+      return (native_int*)&serial_;
+    }
+
+    bool valid_p(native_int serial) const {
       return serial == serial_;
     }
 

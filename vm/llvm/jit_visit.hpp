@@ -88,7 +88,6 @@ namespace rubinius {
     Value* vars_;
     bool use_full_scope_;
 
-    Value* global_serial_pos;
     Value* check_global_interrupts_pos;
 
     int called_args_;
@@ -180,10 +179,6 @@ namespace rubinius {
       set_block(start);
 
       ip_pos_ = b().CreateConstGEP2_32(call_frame_, 0, offset::CallFrame::ip, "ip_pos");
-
-      global_serial_pos = b().CreateIntToPtr(
-          clong((intptr_t)llvm_state()->shared().global_serial_address()),
-          llvm::PointerType::getUnqual(ctx_->Int32Ty), "cast_to_intptr");
 
       check_global_interrupts_pos = b().CreateIntToPtr(
           clong((intptr_t)llvm_state()->shared().check_global_interrupts_address()),
@@ -2144,6 +2139,12 @@ use_send:
       return info().method()->literals()->at(which);
     }
 
+    Value* constant_name_serial_address(rubinius::Symbol* constant_name) {
+      return b().CreateIntToPtr(
+          clong((intptr_t)llvm_state()->shared().constant_serials[constant_name]->serial_address()),
+          llvm::PointerType::getUnqual(ctx_->Int32Ty), "cast_to_intptr");
+    }
+
     void visit_push_const_fast(opcode& name) {
       set_has_side_effects();
 
@@ -2155,8 +2156,7 @@ use_send:
       ConstantCache** constant_cache_ptr = reinterpret_cast<ConstantCache**>(&name);
       ConstantCache* constant_cache = *constant_cache_ptr;
 
-      Value* global_serial = b().CreateLoad(global_serial_pos, "global_serial");
-
+      Value* constant_name_serial = b().CreateLoad(constant_name_serial_address(constant_cache->name()), "constant_name_serial");
 
       Value* cache_ptr = b().CreateIntToPtr(
         ConstantInt::get(context()->IntPtrTy, (reinterpret_cast<uintptr_t>(constant_cache_ptr))),
@@ -2174,7 +2174,7 @@ use_send:
 
       Value* current_serial = b().CreateLoad(serial_pos, "serial");
 
-      Value* cmp = b().CreateICmpEQ(global_serial, current_serial, "use_cache");
+      Value* cmp = b().CreateICmpEQ(constant_name_serial, current_serial, "use_cache");
 
       BasicBlock* use_cache = new_block("use_cache");
       BasicBlock* use_call  = new_block("use_call");
@@ -3401,8 +3401,7 @@ use_send:
       ConstantCache** constant_cache_ptr = reinterpret_cast<ConstantCache**>(&name);
       ConstantCache* constant_cache = *constant_cache_ptr;
 
-      Value* global_serial = b().CreateLoad(global_serial_pos, "global_serial");
-
+      Value* constant_name_serial = b().CreateLoad(constant_name_serial_address(constant_cache->name()), "constant_name_serial");
 
       Value* cache_ptr = b().CreateIntToPtr(
         ConstantInt::get(context()->IntPtrTy, (reinterpret_cast<uintptr_t>(constant_cache_ptr))),
@@ -3420,7 +3419,7 @@ use_send:
 
       Value* current_serial = b().CreateLoad(serial_pos, "serial");
 
-      Value* cache_cmp = b().CreateICmpEQ(global_serial, current_serial, "use_under");
+      Value* cache_cmp = b().CreateICmpEQ(constant_name_serial, current_serial, "use_under");
 
       BasicBlock* check_under = new_block("check_under");
       BasicBlock* use_cache   = new_block("use_cache");
