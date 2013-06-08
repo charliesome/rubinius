@@ -4,10 +4,10 @@
 
 using namespace rubinius;
 
-ConstantSerials::Serial* ConstantSerials::symbol_serial(Symbol* sym) {
-  ConstantSerials::Serial*& serial = serials[sym->index()];
+ConstantSerial* ConstantSerialMap::symbol_serial(Symbol* sym) {
+  ConstantSerial*& serial = serials_[sym->index()];
   if(!serial) {
-    serial = new ConstantSerials::Serial();
+    serial = new ConstantSerial();
   }
   return serial;
 }

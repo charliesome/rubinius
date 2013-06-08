@@ -9,30 +9,28 @@
 namespace rubinius {
   class Symbol;
 
-  class ConstantSerials {
-  public:
-    class Serial {
-      native_int serial_;
-
-    public:
-      native_int current() const {
-        return serial_;
-      }
-
-      bool valid_p(native_int serial) {
-        return serial == serial_;
-      }
-
-      void increment() {
-        atomic::fetch_and_add(&serial_, (native_int)1);
-      }
-    };
-
-  private:
-    std::tr1::unordered_map<native_int, Serial*> serials;
+  class ConstantSerial {
+    native_int serial_;
 
   public:
-    Serial* symbol_serial(Symbol*);
+    native_int current() const {
+      return serial_;
+    }
+
+    bool valid_p(native_int serial) {
+      return serial == serial_;
+    }
+
+    void increment() {
+      atomic::fetch_and_add(&serial_, (native_int)1);
+    }
+  };
+
+  class ConstantSerialMap {
+    std::tr1::unordered_map<native_int, ConstantSerial*> serials_;
+
+  public:
+    ConstantSerial* symbol_serial(Symbol*);
   };
 }
 

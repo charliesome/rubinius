@@ -132,7 +132,7 @@ namespace rubinius {
     LLVMState* llvm_state;
     Stats stats;
     uint32_t hash_seed;
-    ConstantSerials constant_serials;
+    ConstantSerialMap constant_serials;
 
   public:
     SharedState(Environment* env, Configuration& config, ConfigParser& cp);

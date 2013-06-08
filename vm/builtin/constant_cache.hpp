@@ -22,7 +22,7 @@ namespace rubinius {
     Executable* executable_; // slot
     int ip_;
     int serial_;
-    ConstantSerials::Serial* serial_ptr_;
+    ConstantSerial* serial_ptr_;
 
   public:
     attr_accessor(name, Symbol);
