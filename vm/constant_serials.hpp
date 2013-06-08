@@ -32,6 +32,7 @@ namespace rubinius {
 
   public:
     ConstantSerialMap();
+    ~ConstantSerialMap();
     ConstantSerial* operator [](Symbol*);
   };
 }
