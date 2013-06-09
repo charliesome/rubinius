@@ -42,7 +42,7 @@ namespace rubinius {
     cache->under(state, nil<Module>());
     cache->scope(state, nil<ConstantScope>());
     cache->serial_ = -1;
-    cache->serial_ptr_ = state->shared().constant_serials[name];
+    cache->serial_ptr_ = state->shared().constant_serial(name);
     return cache;
   }
 

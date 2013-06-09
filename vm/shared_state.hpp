@@ -22,7 +22,7 @@
 
 #include "capi/capi_constants.h"
 
-#include "constant_serials.hpp"
+#include "constant_serial.hpp"
 
 #include <vector>
 #include <tr1/unordered_map>
@@ -63,6 +63,8 @@ namespace rubinius {
 
   typedef std::vector<std::string> CApiConstantNameMap;
   typedef std::tr1::unordered_map<int, capi::Handle*> CApiConstantHandleMap;
+
+  typedef std::tr1::unordered_map<native_int, ConstantSerial*> ConstantSerialMap;
 
   /**
    * SharedState represents the global shared state that needs to be shared
@@ -114,6 +116,9 @@ namespace rubinius {
     utilities::thread::SpinLock capi_constant_lock_;
     utilities::thread::SpinLock llvm_state_lock_;
 
+    utilities::thread::SpinLock constant_serial_lock_;
+    ConstantSerialMap constant_serials_;
+
     CApiBlackList capi_black_list_;
     CApiLocks capi_locks_;
     CApiLockMap capi_lock_map_;
@@ -131,7 +136,6 @@ namespace rubinius {
     LLVMState* llvm_state;
     Stats stats;
     uint32_t hash_seed;
-    ConstantSerialMap constant_serials;
 
   public:
     SharedState(Environment* env, Configuration& config, ConfigParser& cp);
@@ -323,6 +327,8 @@ namespace rubinius {
     }
 
     void initialize_capi_black_list();
+
+    ConstantSerial* constant_serial(Symbol*);
   };
 }
 

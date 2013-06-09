@@ -4,7 +4,7 @@
 #include "builtin/object.hpp"
 #include "machine_code.hpp"
 #include "object_utils.hpp"
-#include "constant_serials.hpp"
+#include "constant_serial.hpp"
 
 namespace rubinius {
   class ConstantScope;

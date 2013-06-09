@@ -1050,15 +1050,16 @@ namespace rubinius {
   }
 
   Object* System::vm_inc_constant_serial(STATE, Symbol* name) {
+    ConstantSerial* serial = state->shared().constant_serial(name);
     if(state->shared().config.serial_debug) {
       std::cerr << "[Serial for constant "
                 << name->debug_str(state)
                 << " increased from "
-                << state->shared().constant_serials[name]->current()
+                << serial->current()
                 << "]"
                 << std::endl;
     }
-    state->shared().constant_serials[name]->increment();
+    serial->increment();
     return cNil;
   }
 

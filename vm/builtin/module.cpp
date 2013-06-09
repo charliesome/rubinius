@@ -115,12 +115,12 @@ namespace rubinius {
 
   void Module::set_const(STATE, Symbol* sym, Object* val) {
     constant_table()->store(state, sym, val, G(sym_public));
-    state->shared().constant_serials[sym]->increment();
+    state->shared().constant_serial(sym)->increment();
   }
 
   void Module::del_const(STATE, Symbol* sym) {
     constant_table()->remove(state, sym);
-    state->shared().constant_serials[sym]->increment();
+    state->shared().constant_serial(sym)->increment();
   }
 
   void Module::set_const(STATE, std::string name, Object* val) {

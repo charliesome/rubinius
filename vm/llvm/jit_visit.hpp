@@ -2141,7 +2141,7 @@ use_send:
 
     Value* constant_name_serial_address(rubinius::Symbol* constant_name) {
       return b().CreateIntToPtr(
-          clong((intptr_t)llvm_state()->shared().constant_serials[constant_name]->serial_address()),
+          clong((intptr_t)llvm_state()->shared().constant_serial(constant_name)->serial_address()),
           llvm::PointerType::getUnqual(ctx_->Int32Ty), "cast_to_intptr");
     }
 

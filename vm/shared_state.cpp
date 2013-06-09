@@ -87,6 +87,10 @@ namespace rubinius {
     delete world_;
     delete om;
     delete auxiliary_threads_;
+
+    for(ConstantSerialMap::iterator iter = constant_serials_.begin(); iter != constant_serials_.end(); ++iter) {
+      delete iter->second;
+    }
   }
 
   void SharedState::add_managed_thread(ManagedThread* thr) {
@@ -184,6 +188,7 @@ namespace rubinius {
     capi_locks_lock_.init();
     capi_constant_lock_.init();
     auxiliary_threads_->init();
+    constant_serial_lock_.init();
 
     world_->reinit();
   }
@@ -253,6 +258,15 @@ namespace rubinius {
       ruby_critical_set_ = false;
       ruby_critical_lock_.unlock();
     }
+  }
+  
+  ConstantSerial* SharedState::constant_serial(Symbol* sym) {
+    utilities::thread::SpinLock::LockGuard guard(constant_serial_lock_);
+    ConstantSerial*& serial = constant_serials_[sym->index()];
+    if(!serial) {
+      serial = new ConstantSerial();
+    }
+    return serial;
   }
 
   void SharedState::enter_capi(STATE, const char* file, int line) {

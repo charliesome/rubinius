@@ -4,8 +4,6 @@
 #include "prelude.hpp"
 #include "util/thread.hpp"
 
-#include <tr1/unordered_map>
-
 namespace rubinius {
   class Symbol;
 
@@ -28,16 +26,6 @@ namespace rubinius {
     void increment() {
       atomic::fetch_and_add(&serial_, (native_int)1);
     }
-  };
-
-  class ConstantSerialMap {
-    rubinius::utilities::thread::SpinLock lock_;
-    std::tr1::unordered_map<native_int, ConstantSerial*> serials_;
-
-  public:
-    ConstantSerialMap();
-    ~ConstantSerialMap();
-    ConstantSerial* operator [](Symbol*);
   };
 }
 
