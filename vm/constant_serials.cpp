@@ -14,7 +14,7 @@ ConstantSerialMap::~ConstantSerialMap() {
 }
 
 ConstantSerial* ConstantSerialMap::operator [](Symbol* sym) {
-  utilities::thread::SpinLock::LockGuard guard();
+  utilities::thread::SpinLock::LockGuard guard(lock_);
   ConstantSerial*& serial = serials_[sym->index()];
   if(!serial) {
     serial = new ConstantSerial();
